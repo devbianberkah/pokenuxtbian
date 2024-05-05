@@ -25,7 +25,32 @@ async function fetchData(){
   return results;
 }
 
-fetchData().then(data => console.log(data)).catch(error => console.error(error));
+async function fetchDetailed(pk:any){
+  const { data:pokeDetail } = await useFetch(pk.url);
+      const target2 = { prop2:pokeDetail };
+      const proxy2 = new Proxy(target2, handler);
+      const { prop2 } = proxy2;
+      return prop2._rawValue
+}
+
+function fetchDetailData(){
+  for(let pk of pokemonList){
+        fetchDetailed(pk)
+        .then(data=>{
+            pokeDetailList.push(data)
+            console.log(data)
+          }
+        )
+        .catch(error=>console.error(error));
+  }
+}
+
+fetchData().
+  then(data =>{ 
+    pokemonList = data;
+    fetchDetailData()
+})
+  .catch(error => console.error(error));
 
 
 // const targetRawValue = {prop2:prop1._rawValue};
@@ -34,20 +59,15 @@ fetchData().then(data => console.log(data)).catch(error => console.error(error))
 // pokemonList = prop2.results;
 // console.log(pokemonList);
 
-// for(let pk of pokemonList){
-//   const { data:pokeDetail } = await useFetch(pk.url);
-//   const target2 = { prop2:pokeDetail };
-  
-//   const proxy2 = new Proxy(target2, handler);
-//   const { prop2 } = proxy2;
-//   pokeDetailList.push(prop2._rawValue);
-// }
+
 </script>
 
 <template>
     <div class="page-content">
         <div class="grid">
-       
+             <NuxtLink :to="`pokemon/${p.name}`" class="column" v-for="(p,index) in pokeDetailList" :key="index">
+                {{ p.name  }}
+            </NuxtLink>
         </div>
     </div>
 </template>
