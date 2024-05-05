@@ -2,8 +2,8 @@
 useHead({
     title:"Data Posts"
 });
-const router= useRouter();
-const route= useRoute();
+
+
 const runtime = useRuntimeConfig()
 let pokemonList = Array();
 let pokeDetailList = Array();
@@ -14,50 +14,67 @@ const handler = {
   }
 };
 
-async function fetchData(){
-  const { data:pokemons } = await useFetch(`${runtime.public.baseUrl}pokemon?limit=10`);
-  const target = { prop1:pokemons };
-  const proxy = new Proxy(target, handler);
-  const { prop1 } = proxy;
-  const { _rawValue } = prop1;
-  const { results} = _rawValue;
-  // pokemonList = _rawValue;
-  return results;
-}
 
-async function fetchDetailed(pk:any){
-  const { data:pokeDetail } = await useFetch(pk.url);
-      const target2 = { prop2:pokeDetail };
-      const proxy2 = new Proxy(target2, handler);
-      const { prop2 } = proxy2;
-      return prop2._rawValue
-}
+const { data:pokemons } = await useFetch(`${runtime.public.baseUrl}pokemon?limit=10`);
+const target = { prop1:pokemons };
+const proxy = new Proxy(target, handler);
+const { prop1 } = proxy;
+const { _rawValue } = prop1;
+const { results} = _rawValue;
 
-function fetchDetailData(){
-  for(let pk of pokemonList){
-        fetchDetailed(pk)
-        .then(data=>{
-            pokeDetailList.push(data)
-            console.log(data)
-          }
-        )
-        .catch(error=>console.error(error));
-  }
-}
-
-fetchData().
-  then(data =>{ 
-    pokemonList = data;
-    fetchDetailData()
+watch(pokemons, (newPage)=>{
+    const target = { prop1:pokemons };
+    const proxy = new Proxy(target, handler);
+    const { prop1 } = proxy;
+    const { _rawValue } = prop1;
+    const { results} = _rawValue;
+    pokemonList = results;
+    for(let pk of pokemonList){
+        useFetch(pk.url)
+          .then((response)=>{
+            console.log(response.data);
+            
+            const target2 = { prop2:response.data };
+            const proxy2 = new Proxy(target2, handler);
+            const { prop2 } = proxy2;
+            pokeDetailList.push(prop2._rawValue)
+            // return pokeDetailList;
+        });
+        
+    }   
+}, {
+    deep: true,
+    immediate:true
 })
-  .catch(error => console.error(error));
+
+// async function fetchData(){
+//   const { data:pokemons } = await useFetch(`${runtime.public.baseUrl}pokemon?limit=10`);
+//   const target = { prop1:pokemons };
+//   const proxy = new Proxy(target, handler);
+//   const { prop1 } = proxy;
+//   const { _rawValue } = prop1;
+//   const { results} = _rawValue;
+//   // pokemonList = _rawValue;
+//   pokemonList = results;
+//   return results;
+// }
 
 
-// const targetRawValue = {prop2:prop1._rawValue};
-// const proxyRawValue = new Proxy(targetRawValue, handler);
-// const { prop2 } = proxyRawValue;
-// pokemonList = prop2.results;
-// console.log(pokemonList);
+// async function fetchDetailData(){
+//   for(let pk of pokemonList){
+//       const { data:pokeDetail } = await useFetch(pk.url);
+//       const target2 = { prop2:pokeDetail };
+//       const proxy2 = new Proxy(target2, handler);
+//       const { prop2 } = proxy2;
+//       pokeDetailList.push(prop2._rawValue)
+//       console.log(pokeDetailList);
+//       return pokeDetailList;
+//   }
+// }
+
+// fetchData().
+//   then(data=>fetchDetailData())
+//   .catch(error => console.error(error));
 
 
 </script>
@@ -65,9 +82,9 @@ fetchData().
 <template>
     <div class="page-content">
         <div class="grid">
-             <NuxtLink :to="`pokemon/${p.name}`" class="column" v-for="(p,index) in pokeDetailList" :key="index">
-                {{ p.name  }}
-            </NuxtLink>
+          <NuxtLink :to="`pokemon/${p.name}`" class="column" v-for="(p,index) in pokeDetailList" :key="index">
+                  {{ p.name }}
+                </NuxtLink>
         </div>
     </div>
 </template>
@@ -76,4 +93,5 @@ fetchData().
 <!-- <NuxtLink :to="`pokemon/${p.name}`" class="column" v-for="(p,index) in pokeDetailList" :key="index">
                   <HomeCard :pokemon="p" />
                 </NuxtLink>
+                
                -->
