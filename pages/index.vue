@@ -30,7 +30,7 @@ watch(pokemons, (newPage)=>{
                 const { prop2 } = proxy2;
                 pokeDetailList.push(prop2._rawValue)
                 // return pokeDetailList;
-                console.log(pokeDetailList);
+                // console.log(pokeDetailList);
           });
       }
     }
@@ -99,9 +99,9 @@ watch(pokemons, (newPage)=>{
 <template>
     <div class="page-content">
         <div class="grid">
-          <NuxtLink :to="`pokemon/${p.name}`" class="column" v-for="(p,index) in pokeDetailList" :key="index">
-                  {{ p.name }}
-                </NuxtLink>
+          <div class="column" v-for="(p,index) in pokeDetailList" :key="index">
+            <HomeCard :pokemon="p" />
+          </div>
         </div>
     </div>
 </template>
@@ -113,4 +113,7 @@ watch(pokemons, (newPage)=>{
                 <NuxtLink :to="`pokemon/${p.name}`" class="column" v-for="(p,index) in pokeDetailList" :key="index">
                   {{ p.name }}
                 </NuxtLink>
+                 <div class="column" v-for="(p,index) in pokeDetailList" :key="index">
+                  {{ p.name }}
+          </div>
                -->
