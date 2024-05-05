@@ -17,13 +17,13 @@ const handler = {
 const { data:pokemons } = await useFetch(`${runtime.public.baseUrl}pokemon?limit=10`);
 const target = { prop1:pokemons };
 const proxy = new Proxy(target, handler);
-const { prop1 } = proxy;
+const { prop1 } = proxy._rawValue;
 
-const targetRawValue = {prop2:prop1._rawValue};
-const proxyRawValue = new Proxy(targetRawValue, handler);
-const { prop2 } = proxyRawValue;
-// // console.log(prop2.results);
-pokemonList = prop2.results;
+// const targetRawValue = {prop2:prop1._rawValue};
+// const proxyRawValue = new Proxy(targetRawValue, handler);
+// const { prop2 } = proxyRawValue;
+// pokemonList = prop2.results;
+// console.log(pokemonList);
 
 // for(let pk of pokemonList){
 //   const { data:pokeDetail } = await useFetch(pk.url);
