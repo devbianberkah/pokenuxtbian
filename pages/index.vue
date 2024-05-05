@@ -19,8 +19,9 @@ const target = { prop1:pokemons };
 const proxy = new Proxy(target, handler);
 const { prop1 } = proxy;
 const { _rawValue } = prop1;
-pokemonList = _rawValue.results;
-console.log(pokemonList);
+const { results} = _rawValue;
+// pokemonList = _rawValue;
+console.log(results);
 
 // const targetRawValue = {prop2:prop1._rawValue};
 // const proxyRawValue = new Proxy(targetRawValue, handler);
