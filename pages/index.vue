@@ -14,14 +14,19 @@ const handler = {
   }
 };
 
-const { data:pokemons } = await useFetch(`${runtime.public.baseUrl}pokemon?limit=10`);
-const target = { prop1:pokemons };
-const proxy = new Proxy(target, handler);
-const { prop1 } = proxy;
-const { _rawValue } = prop1;
-const { results} = _rawValue;
-// pokemonList = _rawValue;
-console.log(results);
+async function fetchData(){
+  const { data:pokemons } = await useFetch(`${runtime.public.baseUrl}pokemon?limit=10`);
+  const target = { prop1:pokemons };
+  const proxy = new Proxy(target, handler);
+  const { prop1 } = proxy;
+  const { _rawValue } = prop1;
+  const { results} = _rawValue;
+  // pokemonList = _rawValue;
+  return results;
+}
+
+fetchData().then(data => console.log(data)).catch(error => console.error(error));
+
 
 // const targetRawValue = {prop2:prop1._rawValue};
 // const proxyRawValue = new Proxy(targetRawValue, handler);
