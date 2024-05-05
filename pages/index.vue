@@ -18,8 +18,8 @@ const { data:pokemons } = await useFetch(`${runtime.public.baseUrl}pokemon?limit
 const target = { prop1:pokemons };
 const proxy = new Proxy(target, handler);
 const { prop1 } = proxy;
-const { results } = prop1._rawValue;
-pokemonList = results;
+const { _rawValue } = prop1;
+pokemonList = _rawValue.results;
 console.log(pokemonList);
 
 // const targetRawValue = {prop2:prop1._rawValue};
