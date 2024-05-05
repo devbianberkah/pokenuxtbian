@@ -1,21 +1,41 @@
-<script setup>
+<script setup lang="ts">
 useHead({
     title:"Data Posts"
 });
 const router= useRouter();
 const route= useRoute();
 const runtime = useRuntimeConfig()
-let pokemonList = [];
+let pokemonList = Array();
 let pokeDetailList = Array();
 
+const handler = {
+  get: (target:any, prop:any, receiver:any) => {
+    return Reflect.get(target, prop, receiver);
+  }
+};
+
 const { data:pokemons } = await useFetch(`${runtime.public.baseUrl}pokemon?limit=10`);
-console.log(pokemons);
+const target = { prop1:pokemons };
+const proxy = new Proxy(target, handler);
+const { prop1 } = proxy;
+pokemonList = prop1._rawValue.results;
+
+for(let pk of pokemonList){
+  const { data:pokeDetail } = await useFetch(pk.url);
+  const target2 = { prop2:pokeDetail };
+  
+  const proxy2 = new Proxy(target2, handler);
+  const { prop2 } = proxy2;
+  pokeDetailList.push(prop2._rawValue);
+}
 </script>
 
 <template>
     <div class="page-content">
         <div class="grid">
-                
+          <div class="column" v-for="(p,index) in pokeDetailList" :key="index">
+                 {{p.name}}
+            </div>
         </div>
     </div>
 </template>
