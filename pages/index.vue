@@ -10,7 +10,6 @@ let pokeDetailList = Array();
 
 const handler = {
   get: (target:any, prop:any, receiver:any) => {
-    console.log(`Getting ${prop}`);
     return Reflect.get(target, prop, receiver);
   }
 };
