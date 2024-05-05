@@ -3,7 +3,7 @@
         <div class="pokemon-box bg-light bg-light--grass">
             <ul class="pokemon-home-box-content">
                 <li class="pokemon-home-box__img-container">
-                    <img class="pokemon-home-box__img" :src="`${pokemon.sprites.other.showdown.front_default}`">    
+                    <img class="pokemon-home-box__img" :src="`${pokemon.sprites.other['official-artwork'].front_default}`">    
                 </li>
                 <li class="pokemon-home-box__detail-container">
                     <ul class="pokemon-home-box-content">
