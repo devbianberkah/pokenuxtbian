@@ -19,11 +19,11 @@ const target = { prop1:pokemons };
 const proxy = new Proxy(target, handler);
 const { prop1 } = proxy;
 
-const targetRawValue = {prop2:prop1._rawValue};
-const proxyRawValue = new Proxy(targetRawValue, handler);
-const { prop2 } = proxyRawValue;
-// console.log(prop2.results);
-pokemonList = prop2.results;
+// const targetRawValue = {prop2:prop1._rawValue};
+// const proxyRawValue = new Proxy(targetRawValue, handler);
+// const { prop2 } = proxyRawValue;
+// // console.log(prop2.results);
+// pokemonList = prop2.results;
 
 // for(let pk of pokemonList){
 //   const { data:pokeDetail } = await useFetch(pk.url);
