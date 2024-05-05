@@ -16,36 +16,53 @@ const handler = {
 
 
 const { data:pokemons } = await useFetch(`${runtime.public.baseUrl}pokemon?limit=10`);
-const target = { prop1:pokemons };
-const proxy = new Proxy(target, handler);
-const { prop1 } = proxy;
-const { _rawValue } = prop1;
-const { results} = _rawValue;
-
 watch(pokemons, (newPage)=>{
-    const target = { prop1:pokemons };
-    const proxy = new Proxy(target, handler);
-    const { prop1 } = proxy;
-    const { _rawValue } = prop1;
-    const { results} = _rawValue;
+  if(newPage){
+    const proxy2 = new Proxy(newPage, handler);
+    const { results } = proxy2;
     pokemonList = results;
     for(let pk of pokemonList){
-        useFetch(pk.url)
-          .then((response)=>{
-            console.log(response.data);
-            
-            const target2 = { prop2:response.data };
-            const proxy2 = new Proxy(target2, handler);
-            const { prop2 } = proxy2;
-            pokeDetailList.push(prop2._rawValue)
-            // return pokeDetailList;
-        });
-        
-    }   
+            useFetch(pk.url)
+              .then((response)=>{
+                
+                const target2 = { prop2:response.data };
+                const proxy2 = new Proxy(target2, handler);
+                const { prop2 } = proxy2;
+                pokeDetailList.push(prop2._rawValue)
+                // return pokeDetailList;
+                console.log(pokeDetailList);
+          });
+      }
+    }
 }, {
     deep: true,
     immediate:true
-})
+});
+//   if(newPage){
+//     const target = { prop1:newPage };
+//     const proxy = new Proxy(newPage, handler);
+//     const { prop1 } = proxy;
+//     // const { _rawValue } = prop1;
+//     // const { results} = _rawValue;
+//     // pokemonList = results;
+//     console.log(prop1);
+//     // for(let pk of pokemonList){
+//     //     useFetch(pk.url)
+//     //       .then((response)=>{
+            
+//     //         const target2 = { prop2:response.data };
+//     //         const proxy2 = new Proxy(target2, handler);
+//     //         const { prop2 } = proxy2;
+//     //         pokeDetailList.push(prop2._rawValue)
+//     //         // return pokeDetailList;
+//     //     });
+        
+//     // }   
+//   }
+// }, {
+//     deep: true,
+//     immediate:true
+// })
 
 // async function fetchData(){
 //   const { data:pokemons } = await useFetch(`${runtime.public.baseUrl}pokemon?limit=10`);
@@ -93,5 +110,7 @@ watch(pokemons, (newPage)=>{
 <!-- <NuxtLink :to="`pokemon/${p.name}`" class="column" v-for="(p,index) in pokeDetailList" :key="index">
                   <HomeCard :pokemon="p" />
                 </NuxtLink>
-                
+                <NuxtLink :to="`pokemon/${p.name}`" class="column" v-for="(p,index) in pokeDetailList" :key="index">
+                  {{ p.name }}
+                </NuxtLink>
                -->
