@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   css:["~/assets/main.css"],
   routeRules: {
     // prerender index route by default
-    '/': { prerender: true },
+    '/': { prerender: false },
   },
   app:{
     head:{
