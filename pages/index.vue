@@ -24,16 +24,16 @@ const { data:pokemons } = await useFetch(`${runtime.public.baseUrl}pokemon?limit
 const proxy2 = new Proxy(pokemons, handler);
 const { results } = proxy2._rawValue;
 pokemonList = results;
-watch(pokemons, (newPage)=>{
-  if(newPage){
-    const proxy2 = new Proxy(newPage, handler);
-    const { results } = proxy2;
-    pokemonList = results;
-    }
-}, {
-    deep: true,
-    immediate:true
-});
+// watch(pokemons, (newPage)=>{
+//   if(newPage){
+//     const proxy2 = new Proxy(newPage, handler);
+//     const { results } = proxy2;
+//     pokemonList = results;
+//     }
+// }, {
+//     deep: true,
+//     immediate:true
+// });
 
 // async function fetchData(){
 //   const { data:pokemons } = await useFetch(`${runtime.public.baseUrl}pokemon?limit=10`);
