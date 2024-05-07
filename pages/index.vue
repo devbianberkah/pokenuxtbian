@@ -1,8 +1,14 @@
 <script setup lang="ts">
+import { useUtils } from '~/composables/useUtils';
+
 useHead({
     title:"Data Posts"
 });
+// const { sayHello} = useUtils();
+// sayHello();
 
+// const { $sayHello } = useNuxtApp();
+// $sayHello('okee');
 
 const runtime = useRuntimeConfig()
 let pokemonList = Array();
@@ -14,26 +20,15 @@ const handler = {
   }
 };
 
-console.log("1");
 const { data:pokemons } = await useFetch(`${runtime.public.baseUrl}pokemon?limit=10`);
+const proxy2 = new Proxy(pokemons, handler);
+const { results } = proxy2._rawValue;
+pokemonList = results;
 watch(pokemons, (newPage)=>{
-  console.log("2");
   if(newPage){
-    console.log("3");
-
     const proxy2 = new Proxy(newPage, handler);
     const { results } = proxy2;
     pokemonList = results;
-    for(let pk of pokemonList){
-            useFetch(pk.url)
-              .then((response)=>{
-                console.log("4");
-                const target2 = { prop2:response.data };
-                const proxy2 = new Proxy(target2, handler);
-                const { prop2 } = proxy2;
-                pokeDetailList.push(prop2._rawValue)
-          });
-      }
     }
 }, {
     deep: true,
@@ -79,7 +74,7 @@ watch(pokemons, (newPage)=>{
 <template>
     <div class="page-content">
         <div class="grid">
-            <div class="column" v-for="(p,index) in pokeDetailList" :key="index">
+            <div class="column" v-for="(p,index) in pokemonList" :key="index">
                   <HomeCard :pokemon="p" />
             </div>
         </div>
@@ -93,7 +88,13 @@ watch(pokemons, (newPage)=>{
                 <NuxtLink :to="`pokemon/${p.name}`" class="column" v-for="(p,index) in pokeDetailList" :key="index">
                   {{ p.name }}
                 </NuxtLink>
+
                  <div class="column" v-for="(p,index) in pokeDetailList" :key="index">
                   {{ p.name }}
-          </div>
+                 </div>
+
+                  <div class="column" v-for="(p,index) in pokeDetailList" :key="index">
+                     {{ p.name }} - {{  p.sprites.other['official-artwork'].front_default }}
+                     <HomeCard :pokemon="p" />
+                  </div>
                -->
