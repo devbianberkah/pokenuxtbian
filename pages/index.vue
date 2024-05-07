@@ -74,9 +74,7 @@ pokemonList = results;
 <template>
     <div class="page-content">
         <div class="grid">
-            <div class="column" v-for="(p,index) in pokemonList" :key="index">
-                  {{ p.name }}
-            </div>
+           
         </div>
     </div>
 </template>
