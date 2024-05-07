@@ -75,7 +75,7 @@ watch(pokemons, (newPage)=>{
     <div class="page-content">
         <div class="grid">
             <div class="column" v-for="(p,index) in pokemonList" :key="index">
-                  <HomeCard :pokemon="p" />
+                  {{ p.name }}
             </div>
         </div>
     </div>
