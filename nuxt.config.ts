@@ -21,5 +21,6 @@ export default defineNuxtConfig({
     public:{
       baseUrl:'',
     }
-  }
+  },
+  
 });
